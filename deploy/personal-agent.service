@@ -1,0 +1,20 @@
+[Unit]
+Description=Claude Telegram orchestrator
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/claude-telegram-orchestrator
+Environment=HOME=/home/ubuntu
+Environment=PATH=/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/snap/bin
+EnvironmentFile=/home/ubuntu/claude-telegram-orchestrator/.env
+ExecStart=/home/ubuntu/claude-telegram-orchestrator/venv/bin/python /home/ubuntu/claude-telegram-orchestrator/main.py
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=300
+
+[Install]
+WantedBy=multi-user.target

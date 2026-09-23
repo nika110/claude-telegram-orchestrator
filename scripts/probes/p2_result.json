@@ -1,0 +1,13 @@
+{
+ "probe": "P2",
+ "question": "does a changed system_prompt apply on resume?",
+ "turn1_under_A": {
+  "reply": "ALPHA",
+  "session_id": "19f58c32-0edf-4ed5-9eb3-dc4854fdb410"
+ },
+ "turn2_resumed_under_B": {
+  "reply": "BRAVO"
+ },
+ "SYSTEM_PROMPT_MODE": "per_turn",
+ "verdict": "APPLIED — the new system_prompt takes effect on resume. A long-lived client per conversation is viable, and the three instruction providers can be re-resolved before each turn."
+}

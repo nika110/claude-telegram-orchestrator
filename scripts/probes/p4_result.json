@@ -1,0 +1,33 @@
+{
+ "probe": "P4",
+ "question": "are append() entry uuids stable and addressable?",
+ "entries_seen": 17,
+ "entries_with_uuid": 8,
+ "uuids_unique": true,
+ "entry_types": [
+  "ai-title",
+  "assistant",
+  "atis-latch",
+  "attachment",
+  "last-prompt",
+  "mode",
+  "queue-operation",
+  "user"
+ ],
+ "subpaths_seen": [
+  ""
+ ],
+ "parent_links_present": true,
+ "control": {
+  "reply": "CRIMSON, OTTER",
+  "knew_colour": true,
+  "knew_animal": true
+ },
+ "anchor_uuid": "ada1101a-7d7b-470a-9b51-ee012e2ea643",
+ "resumed_at_anchor": {
+  "reply": "UNKNOWN",
+  "still_knew_later_fact": false
+ },
+ "UUID_MODE": "addressable",
+ "verdict": "resume_session_at truncated the model's view at our uuid. Entry uuids from append() are usable resume addresses, so pruning the last turn is a re-anchor."
+}

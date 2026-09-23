@@ -1,0 +1,41 @@
+{
+ "probe": "P1",
+ "question": "is load() authoritative on resume?",
+ "turn1": {
+  "reply": "STORED",
+  "session_id": "6db669c5-f555-42e7-9af2-e2ebfdef3629"
+ },
+ "entries_appended": 9,
+ "store_keys": [
+  "('-home-ubuntu-agents-orchestrator', '6db669c5-f555-42e7-9af2-e2ebfdef3629', '')"
+ ],
+ "control_uncensored": {
+  "reply": "BANANA",
+  "knew_word": true
+ },
+ "censored": {
+  "reply": "UNKNOWN",
+  "still_knew_word": false
+ },
+ "load_calls": [
+  {
+   "key": [
+    "-home-ubuntu-agents-orchestrator",
+    "6db669c5-f555-42e7-9af2-e2ebfdef3629",
+    ""
+   ],
+   "returned": 9
+  },
+  {
+   "key": [
+    "-home-ubuntu-agents-orchestrator",
+    "6db669c5-f555-42e7-9af2-e2ebfdef3629",
+    ""
+   ],
+   "returned": 17,
+   "after_censor": 11
+  }
+ ],
+ "COLD_START_MODE": "authoritative",
+ "verdict": "AUTHORITATIVE — censoring load() removed the fact from the model's view. The app owns the conversation; windowing is simply what load() returns."
+}

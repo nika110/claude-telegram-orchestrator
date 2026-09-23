@@ -1,0 +1,17 @@
+{
+ "probe": "P3",
+ "question": "does a nested agent run get its own subpath?",
+ "reply": "I'll help you with that! First, let me load the Task tool schemas since they're deferred. Now I'll create a task to ask the researcher subagent about France's capital: Now let me ask the researcher ag",
+ "session_id": "648b641c-e78f-4754-9952-4f8f01b21a63",
+ "subpaths_seen": [
+  "",
+  "subagents/agent-a9f042f597ce00cc7"
+ ],
+ "session_ids_seen": [
+  "648b641c-e78f-4754-9952-4f8f01b21a63"
+ ],
+ "appends": 36,
+ "task_actually_ran": true,
+ "SUBPATH_MODE": "sdk_partitions",
+ "verdict": "Nested runs arrive under a non-empty subpath (['subagents/agent-a9f042f597ce00cc7']). The SDK partitions them for us; W9 mirrors those entries back as author=<agent> rows."
+}

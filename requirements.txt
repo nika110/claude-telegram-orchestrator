@@ -1,0 +1,9 @@
+# The agent. Needs the `claude` CLI installed and logged in on the box.
+claude-agent-sdk==0.2.148
+mcp>=1.24,<2
+python-telegram-bot==22.8
+python-dotenv==1.2.2
+
+# Tests
+pytest==9.1.1
+pytest-asyncio==1.4.0

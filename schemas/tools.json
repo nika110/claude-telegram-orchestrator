@@ -1,0 +1,237 @@
+{
+ "_note": "Tool schemas served to the model. Each entry must match the signature of the function with the same name in app/tools/ -- tests/test_tool_schemas.py checks that. Originally generated from the functions' signatures and docstrings; edit both together.",
+ "tools": {
+  "start_coding_job": {
+   "description": "Start a Claude Code session in the background and return a job id at once.\n\nThis is the normal way to get code written. It does NOT block the\nconversation: you get a job id back immediately, you stay able to answer\nother questions, and the owner is sent the outcome automatically when the\njob finishes. Tell them the job id and that you'll report back -- then\nactually answer their next message instead of waiting.\n\nUse check_coding_job with the id if they ask how it's going. Never start a\nsecond job for the same task because the first one hasn't answered yet.\n\nArgs:\n    prompt: Full, self-contained task instructions for Claude Code.\n    working_dir: Absolute path to treat as the project root.\n    allowed_tools: Comma-separated Claude Code tool names to allow.\n    resume_session_id: If set, continues that prior Claude Code session in\n        the same working_dir instead of starting fresh.\n    timeout_seconds: Give up on the run after this long.\n    model: Which model to run, optionally with a reasoning effort level --\n        \"opus\", \"sonnet\", \"claude-fable-5\", \"opus high effort\". Leave empty\n        for Opus, which is what these jobs start on unless told otherwise.",
+   "parameters_json_schema": {
+    "properties": {
+     "allowed_tools": {
+      "default": "Bash,Read,Edit,Write,Glob,Grep",
+      "title": "Allowed Tools",
+      "type": "string"
+     },
+     "model": {
+      "default": "",
+      "title": "Model",
+      "type": "string"
+     },
+     "prompt": {
+      "title": "Prompt",
+      "type": "string"
+     },
+     "resume_session_id": {
+      "default": "",
+      "title": "Resume Session Id",
+      "type": "string"
+     },
+     "timeout_seconds": {
+      "default": 3600,
+      "title": "Timeout Seconds",
+      "type": "integer"
+     },
+     "working_dir": {
+      "title": "Working Dir",
+      "type": "string"
+     }
+    },
+    "required": [
+     "prompt",
+     "working_dir"
+    ],
+    "title": "start_coding_jobParams",
+    "type": "object"
+   }
+  },
+  "check_coding_job": {
+   "description": "Check how a background coding job is doing.\n\nReport what this actually returns. If the status is still \"running\", say it\nis still running and roughly how long it has been going -- do not guess at\nwhat it is doing internally, and do not claim it finished.\n\nArgs:\n    job_id: The id returned by start_coding_job.",
+   "parameters_json_schema": {
+    "properties": {
+     "job_id": {
+      "title": "Job Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "job_id"
+    ],
+    "title": "check_coding_jobParams",
+    "type": "object"
+   }
+  },
+  "list_coding_jobs": {
+   "description": "List recent background coding jobs and their status.\n\nUse this when asked what is running, or before starting a job that may\nalready be in flight.",
+   "parameters_json_schema": null
+  },
+  "cancel_coding_job": {
+   "description": "Stop a background coding job that is still running.\n\nArgs:\n    job_id: The id returned by start_coding_job.",
+   "parameters_json_schema": {
+    "properties": {
+     "job_id": {
+      "title": "Job Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "job_id"
+    ],
+    "title": "cancel_coding_jobParams",
+    "type": "object"
+   }
+  },
+  "run_claude_code": {
+   "description": "Run a SHORT Claude Code session and wait for the result.\n\nOnly use this when you genuinely cannot continue without the answer in this\nsame turn -- it freezes the whole conversation while it runs, so the owner\ncannot even ask you a question until it finishes. For anything that might\ntake more than a few minutes, use start_coding_job instead.\n\nArgs:\n    prompt: Full, self-contained task instructions for Claude Code.\n    working_dir: Absolute path to treat as the project root.\n    allowed_tools: Comma-separated Claude Code tool names to allow.\n    resume_session_id: If set, continues that prior Claude Code session.\n    timeout_seconds: Max seconds to wait, capped at 900.",
+   "parameters_json_schema": {
+    "properties": {
+     "allowed_tools": {
+      "default": "Bash,Read,Edit,Write,Glob,Grep",
+      "title": "Allowed Tools",
+      "type": "string"
+     },
+     "prompt": {
+      "title": "Prompt",
+      "type": "string"
+     },
+     "resume_session_id": {
+      "default": "",
+      "title": "Resume Session Id",
+      "type": "string"
+     },
+     "timeout_seconds": {
+      "default": 600,
+      "title": "Timeout Seconds",
+      "type": "integer"
+     },
+     "working_dir": {
+      "title": "Working Dir",
+      "type": "string"
+     }
+    },
+    "required": [
+     "prompt",
+     "working_dir"
+    ],
+    "title": "run_claude_codeParams",
+    "type": "object"
+   }
+  },
+  "run_shell_command": {
+   "description": "Run a simple shell command directly and return its raw output.\n\nUse this for quick, simple operations -- listing files, reading a file,\nchecking disk/process/service status, simple filesystem operations like\ncreating or removing a directory. It just runs one command and returns\nthe output, with no reasoning about code.\n\nFor anything that involves actually writing or modifying source code,\nuse start_coding_job instead -- it drives a real Claude Code session, not\na bare shell.\n\nArgs:\n    command: The shell command to run (executed via /bin/sh -c).\n    working_dir: Absolute path to run the command from.\n    timeout_seconds: Give up if the command runs longer than this. Keep\n        it short -- this tool is for quick commands, and a long-running\n        or interactive one would otherwise block the conversation.",
+   "parameters_json_schema": {
+    "properties": {
+     "command": {
+      "title": "Command",
+      "type": "string"
+     },
+     "timeout_seconds": {
+      "default": 60,
+      "title": "Timeout Seconds",
+      "type": "integer"
+     },
+     "working_dir": {
+      "title": "Working Dir",
+      "type": "string"
+     }
+    },
+    "required": [
+     "command"
+    ],
+    "title": "run_shell_commandParams",
+    "type": "object"
+   }
+  },
+  "read_file": {
+   "description": "Read a text file and return its contents.\n\nArgs:\n    path: Absolute path to the file.\n    max_bytes: Stop after this many bytes; the result says if it was cut.",
+   "parameters_json_schema": {
+    "properties": {
+     "max_bytes": {
+      "default": 200000,
+      "title": "Max Bytes",
+      "type": "integer"
+     },
+     "path": {
+      "title": "Path",
+      "type": "string"
+     }
+    },
+    "required": [
+     "path"
+    ],
+    "title": "read_fileParams",
+    "type": "object"
+   }
+  },
+  "write_file": {
+   "description": "Write a text file, creating parent directories as needed.\n\nUse this to create scripts, config files or source code without Claude\nCode. An existing file is copied to <path>.bak first so a bad write is\nalways recoverable.\n\nArgs:\n    path: Absolute path to write.\n    content: The full file contents. This REPLACES the file; it does not\n        append, so include everything the file should end up containing.\n    overwrite: If False, refuse when the file already exists.",
+   "parameters_json_schema": {
+    "properties": {
+     "content": {
+      "title": "Content",
+      "type": "string"
+     },
+     "overwrite": {
+      "default": true,
+      "title": "Overwrite",
+      "type": "boolean"
+     },
+     "path": {
+      "title": "Path",
+      "type": "string"
+     }
+    },
+    "required": [
+     "path",
+     "content"
+    ],
+    "title": "write_fileParams",
+    "type": "object"
+   }
+  },
+  "replace_in_file": {
+   "description": "Replace exact text inside an existing file.\n\nPrefer this over rewriting a whole file for a small edit -- it cannot\naccidentally drop the parts you didn't mean to touch. Fails rather than\nguessing if `find` does not appear, or appears more often than `count`\nallows.\n\nArgs:\n    path: Absolute path to the file.\n    find: The exact text to look for, including indentation.\n    replace: What to put in its place.\n    count: How many occurrences to replace. Use 0 to replace all.",
+   "parameters_json_schema": {
+    "properties": {
+     "count": {
+      "default": 1,
+      "title": "Count",
+      "type": "integer"
+     },
+     "find": {
+      "title": "Find",
+      "type": "string"
+     },
+     "path": {
+      "title": "Path",
+      "type": "string"
+     },
+     "replace": {
+      "title": "Replace",
+      "type": "string"
+     }
+    },
+    "required": [
+     "path",
+     "find",
+     "replace"
+    ],
+    "title": "replace_in_fileParams",
+    "type": "object"
+   }
+  },
+  "list_directory": {
+   "description": "List the entries in a directory, marking which are directories.\n\nArgs:\n    path: Absolute path to the directory.",
+   "parameters_json_schema": {
+    "properties": {
+     "path": {
+      "title": "Path",
+      "type": "string"
+     }
+    },
+    "required": [
+     "path"
+    ],
+    "title": "list_directoryParams",
+    "type": "object"
+   }
+  }
+ }
+}
